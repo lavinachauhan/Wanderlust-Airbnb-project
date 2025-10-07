@@ -1,0 +1,25 @@
+{
+  "name": "wanderlust-airbnb-project",
+  "version": "1.0.0",
+  "description": "My practice project to learn full-stack web development by recreating Airbnb’s core features like listings, user authentication, and reviews.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lavinachauhan/Wanderlust-Airbnb-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lavinachauhan/Wanderlust-Airbnb-project/issues"
+  },
+  "homepage": "https://github.com/lavinachauhan/Wanderlust-Airbnb-project#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.0"
+  }
+}
