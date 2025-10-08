@@ -9,10 +9,14 @@ const listingSchema = new Schema({
     description : {
         type: String
     },
-    image :{
-        type: String,
-        default : "https://unsplash.com/photos/a-pool-of-water-surrounded-by-rocks-and-trees-zo_udYMcaVc",
-        set : (v) => v === "" ? "https://unsplash.com/photos/a-pool-of-water-surrounded-by-rocks-and-trees-zo_udYMcaVc" : v
+    // image :{
+    //     type: String,
+    //     default : "https://unsplash.com/photos/a-pool-of-water-surrounded-by-rocks-and-trees-zo_udYMcaVc",
+    //     set : (v) => v === "" ? "https://unsplash.com/photos/a-pool-of-water-surrounded-by-rocks-and-trees-zo_udYMcaVc" : v
+    // },
+    image: {
+    filename: String,
+    url: String
     },
     price : {
         type: Number
