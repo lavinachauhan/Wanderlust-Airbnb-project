@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require ("mongoose");
 const Listing = require("./models/listing.js");
 const path = require("path");
+const methodOverride = require("method-override");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 main()
@@ -20,6 +21,7 @@ async function main(){
 app.set("views engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({extended : true}));
+app.use(methodOverride("_method"));
 
 
 app.get("/", (req, res) => {
@@ -39,12 +41,54 @@ app.get("/testListing", async (req, res) => {
     res.send("Successful testing");
 })
 
+// edit route
+app.get("/listings/:id/edit", async (req, res) => {
+    let {id} = req.params;
+    let detail = await Listing.findById(id);
+    res.render("listings/edit.ejs", {detail});
+})
+
+// update route
+app.put("/listings/:id", async(req, res) => {
+    let {id} = req.params;
+    let detail = req.body.listing;
+    await Listing.findByIdAndUpdate(id, {...detail});
+    res.redirect(`/listings/${id}`);
+
+})
+
+// delete route
+app.delete("/listings/:id", async (req, res) => {
+    let {id} = req.params;
+    let deletedListing = await Listing.findByIdAndDelete(id); 
+    console.log(deletedListing);
+    res.redirect("/listings");
+
+})
+
 // index route
 app.get("/listings", async (req, res) => {
     const allListings = await Listing.find({});
     // console.log(allListings);
     res.render("listings/index.ejs", {allListings});
 })
+
+// new route
+app.get("/listings/new", (req, res) => {
+    res.render("listings/new.ejs");
+})
+
+// create route
+app.post("/listings", async (req, res) => {
+    // let {title, description, image, price, country, location} = req.body;
+    let listing = req.body.listing;
+    // let newListing = new Listing(listing);
+    // await newListing.save();
+    console.log(listing);
+    await Listing.insertOne(listing);
+    res.redirect("/listings");
+})
+
 
 // show route
 app.get("/listings/:id", async (req, res) => {
@@ -54,6 +98,10 @@ app.get("/listings/:id", async (req, res) => {
     // console.log(detail);
     res.render("listings/show.ejs", {detail});
 })
+
+
+
+
 
 app.listen(8080, () => {
     console.log("Server is listening to port 8080");
