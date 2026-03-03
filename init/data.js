@@ -1,3 +1,4 @@
+// Note:- All the initialization part is inside this init folder (that mean initial data to store in website)
 const sampleListings = [
   {
     title: "Cozy Beachfront Cottage",
