@@ -7,10 +7,14 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const listings = require("./routes/listings.js");
-const review = require("./routes/review.js");
+const listingRouter = require("./routes/listings.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const User = require("./models/user.js"); 
 
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -50,19 +54,42 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
 })
 
+
+
 app.get("/", (req, res) => {
     res.send("Hi, I am root");
 })
 
+// app.get("/demoUser", async(req, res) => {
+//     let fakeUser = new User({
+//         email:"student@gmail.com",
+//         username:"delta-student"
+//     });
 
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", review);
+//     let registeredUser = await User.register(fakeUser, "helloworld");
+//     // console.log(registeredUser);
+//     res.send(registeredUser);
+// });
+
+
+
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
 
 app.get("/testListing", wrapAsync(async (req, res) => {
     // creating a document (record) in listings table in Listing model
